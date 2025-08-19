@@ -46,9 +46,9 @@ function agregarProducto(nuevoProducto) {
     guardarProductos(productos);
 }
 
-function eliminarProductos(id) {
+function eliminarProductos(precio) {
     let productos = leerProductos();
-    productos = productos.filter(p => p.id >= id);
+    productos = productos.filter(p => p.price >= precio);
     guardarProductos(productos);
 }
 
@@ -77,4 +77,4 @@ function mostrarProductos() {
 
 crearArchivoDesdeAPI()
 //agregarProducto(nuevoProducto);
-//eliminarProductos(15);
+//eliminarProductos(200);
