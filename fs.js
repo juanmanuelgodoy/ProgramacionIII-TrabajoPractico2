@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 const fetch = require("node-fetch");
 
 const archivoProductos = "./productos.json";
@@ -10,18 +10,18 @@ async function crearArchivoDesdeAPI() {
 
         const productos = await response.json();
 
-        fs.writeFileSync(archivoProductos, JSON.stringify(productos, null, 2), "utf-8");
+        await fs.writeFile(archivoProductos, JSON.stringify(productos, null, 2), "utf-8");
         console.log("Se creó productos.json");
-        mostrarProductos()
+        await mostrarProductos();
 
     } catch (error) {
-        console.error("Error al obtener el listados de productos:", error);
+        console.error("Error al obtener el listado de productos:", error);
     }
 }
 
-function leerProductos() {
+async function leerProductos() {
     try {
-        const data = fs.readFileSync(archivoProductos, "utf-8");
+        const data = await fs.readFile(archivoProductos, "utf-8");
         return JSON.parse(data);
     } catch (error) {
         console.error("Error al leer el archivo:", error);
@@ -29,27 +29,27 @@ function leerProductos() {
     }
 }
 
-function guardarProductos(productos) {
+async function guardarProductos(productos) {
     try {
-        fs.writeFileSync(archivoProductos, JSON.stringify(productos, null, 2), "utf-8");
-        console.log("El archivo productos.json se actualizó correctamente")
-        mostrarProductos()
+        await fs.writeFile(archivoProductos, JSON.stringify(productos, null, 2), "utf-8");
+        console.log("El archivo productos.json se actualizó correctamente");
+        await mostrarProductos();
 
     } catch (error) {
         console.error("Error al guardar el archivo:", error);
     }
 }
 
-function agregarProducto(nuevoProducto) {
-    const productos = leerProductos();
+async function agregarProducto(nuevoProducto) {
+    const productos = await leerProductos();
     productos.push(nuevoProducto);
-    guardarProductos(productos);
+    await guardarProductos(productos);
 }
 
-function eliminarProductos(precio) {
-    let productos = leerProductos();
+async function eliminarProductos(precio) {
+    let productos = await leerProductos();
     productos = productos.filter(p => p.price >= precio);
-    guardarProductos(productos);
+    await guardarProductos(productos);
 }
 
 const nuevoProducto = {
@@ -62,9 +62,9 @@ const nuevoProducto = {
     rating: { rate: 3.6, count: 145 }
 };
 
-function mostrarProductos() {
+async function mostrarProductos() {
     try {
-        const data = fs.readFileSync(archivoProductos, "utf-8");
+        const data = await fs.readFile(archivoProductos, "utf-8");
         const productos = JSON.parse(data);
 
         console.log("El listado actual de productos es:");
@@ -77,4 +77,5 @@ function mostrarProductos() {
 
 crearArchivoDesdeAPI()
 //agregarProducto(nuevoProducto);
-//eliminarProductos(200);
+//eliminarProductos(100);
+

@@ -106,42 +106,47 @@ async function eliminarProducto(id) {
             method: "DELETE"
         });
 
-        const data = await response.json();
-        console.log("Producto eliminado:", data);
+        if (!response.ok) throw new Error(`Error al eliminar producto con id ${id}`);
+
+        const productoEliminado = await response.json();
+        console.log("Producto eliminado:", productoEliminado);
 
     } catch (error) {
-        console.error("Error al eliminar producto:", error);
+        console.error("Error al obtener el producto buscado: ", error);
     }
 }
 
 async function actualizarProducto(id) {
+    const productoActualizado = {
+        title: "Producto actualizado con Update",
+        price: 39.99,
+        description: "Descripción actualizada",
+        category: "men's clothing",
+        image: "https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_t.png"
+    };
+
     try {
         const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
             method: "PUT",
-            body: JSON.stringify({
-                title: "Producto actualizado",
-                price: 250.99,
-                description: "Nueva descripción",
-                category: "men's clothing",
-                image: "https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_t.png",
-                rating: { rate: 3.6, count: 145 } // la API lo va a ignorar
-            }),
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(productoActualizado)
         });
 
-        const productoActualizado = await response.json();
-        console.log("El producto modificado es:", productoActualizado);
+        if (!response.ok) throw new Error(`Error al actualizar producto con id ${id}`);
 
-        const respTodos = await fetch("https://fakestoreapi.com/products");
-        const productosFinales = await respTodos.json();
-        console.log("El listado de productos finales es:", productosFinales);
+        const productoAct = await response.json();
+        console.log("El producto actualizado es: ", productoAct);
+
+        const todosLosProductos = await fetch("https://fakestoreapi.com/products");
+        const productos = await todosLosProductos.json();
+        console.log("El listado final de los productos es: ", productos);
 
     } catch (error) {
-        console.error("Error al actualizar el producto:", error);
+        console.error("Error al obtener el producto buscado: ", error);
     }
 }
 
-//obtenerProductos();
+obtenerProductos();
 //obtenerProductosSeleccionados()
 //guardarSeleccionados()
 //agregarProducto();
