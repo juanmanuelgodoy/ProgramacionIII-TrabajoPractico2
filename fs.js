@@ -48,7 +48,7 @@ async function agregarProducto(nuevoProducto) {
 
 async function eliminarProductos(precio) {
     let productos = await leerProductos();
-    productos = productos.filter(p => p.price >= precio);
+    productos = productos.filter(p => p.price <= precio);
     await guardarProductos(productos);
 }
 
