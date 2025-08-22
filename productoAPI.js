@@ -1,3 +1,5 @@
+const fs = require("fs").promises;
+
 async function obtenerProductos() {
     try {
         const response = await fetch("https://fakestoreapi.com/products");
@@ -29,7 +31,7 @@ async function obtenerProductosSeleccionados() {
 }
 
 async function guardarSeleccionados() {
-        try {
+    try {
         const response = await fetch("https://fakestoreapi.com/products");
         if (!response.ok) throw new Error("No se puede crear el listado de productos seleccionados");
 
@@ -39,10 +41,13 @@ async function guardarSeleccionados() {
 
         const prodSeleccionados = JSON.stringify(seleccionados, null, 2);
 
-        console.log("Listado de productos seleccionados (json) es: ", prodSeleccionados);
+        console.log("Listado de productos seleccionados (json):\n", prodSeleccionados);
+
+        await fs.writeFile("productosGuardados.json", prodSeleccionados, "utf-8");
+        console.log("Archivo productosGuardados.json creado y guardado");
 
     } catch (error) {
-        console.error("Error al obtener el listado de productos seleccionados:", error);
+        console.error("Error al obtener o guardar los productos seleccionados:", error);
     }
 }
 
